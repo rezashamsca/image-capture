@@ -1,0 +1,46 @@
+package com.example.imageservice.controller;
+
+import com.example.imageservice.api.ImageApi;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+// http://www.mkyong.com/spring-boot/spring-boot-file-upload-example/
+// http://www.baeldung.com/spring-mvc-image-media-data
+// https://murygin.wordpress.com/2014/10/13/rest-web-service-file-uploads-spring-boot/
+// https://stackoverflow.com/questions/21926893/sending-an-image-and-json-data-to-server-using-ajax-post-request
+// https://spring.io/guides/gs/uploading-files/
+
+@RequestMapping("/image")
+public class ImageServiceController {
+    @Autowired
+    private ImageApi imageApi;
+
+    @PostMapping("/upload")
+    public String imageUpload(@RequestParam("image") MultipartFile file, RedirectAttributes redirectAttributes) {
+        imageApi.uploadImage(file);
+        redirectAttributes.addFlashAttribute("message",
+                new StringBuilder().append("Successfully uploaded ")
+                .append(file.getOriginalFilename())
+                .append("!")
+                .toString()
+                );
+        return "redirect:/";
+    }
+
+    @GetMapping("/image/{imageId}")
+    @ResponseBody
+    public ResponseEntity<Resource> getImage(@PathVariable Long imageId) {
+        Resource image = imageApi.getImage(imageId);
+        String response = new StringBuilder()
+                .append("attachment; filename=\"")
+                .append(image.getFilename())
+                .append("\"")
+                .toString();
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, response).body(image);
+    }
+}

@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Enter Image</title>
+        <link src="../stylesheet/capture.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <input type="file" accept="image/*;capture=camera" />
+        </div>
+        <div>
+                <div id="parent">
+                    <div id="child">
+                        <video id="video" width="640" height="480" autoplay></video>
+                    </div>
+                    <div id="child">
+                        <button id="snap">Snap Photo</button>
+                    </div>
+                    <div id="child">
+                        <canvas id="canvas" width="640" height="480"></canvas>
+                    </div>
+                    <div id="child">
+                        <button id="upload">Upload</button>
+                    </div>
+                </div>
+
+                <script src="../script/image-capture.js"></script>
+        </div>
+    </body>
+</html>
