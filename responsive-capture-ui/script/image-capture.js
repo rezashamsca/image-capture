@@ -28,13 +28,10 @@ document.getElementById("upload").addEventListener("click", function() {
     var base64Image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
     var imageData = JSON.stringify(base64Image);
     $.ajax({
-        url: 'http://localhost:8080/image',
+        url: 'http://localhost:3000/image',
         dataType: 'json',
         data: imageData,
         type: 'POST',
-        headers: {
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
-        },
         success: function(data) {
           console.log(data);
           }
