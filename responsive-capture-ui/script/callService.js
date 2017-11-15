@@ -1,5 +1,8 @@
 'use strict'
 
+const https = require('http')
+const host = 'localhost'
+
 function performRequest(endpoint, method, data, success) {
     var dataString = JSON.stringify(data);
     var headers = {};
