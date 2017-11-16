@@ -1,9 +1,9 @@
 'use strict'
 
 const https = require('https')
-const host = 'http://localhost:8080'
+const http = require('http')
 
-function performRequest(endpoint, method, data, success) {
+function performRequest(protocol, host, port, endpoint, method, data, success) {
     var dataString = JSON.stringify(data);
     var headers = {};
     
@@ -16,28 +16,48 @@ function performRequest(endpoint, method, data, success) {
         'Content-Length': dataString.length
       };
     }
-    var options = {
-      host: host,
-      path: endpoint,
-      method: method,
-      headers: headers
-    };
-  
-    var req = https.request(options, function(res) {
-      res.setEncoding('utf-8');
-  
-      var responseString = '';
-  
-      res.on('data', function(data) {
-        responseString += data;
+
+    try {
+      var options = {
+        host: host,
+        port: port,
+        path: endpoint,
+        method: method,
+        headers: headers
+      };
+    
+      var httpClient;
+      if (protocol == 'https') {
+        httpClient = https;
+      }
+      else {
+        httpClient = http;
+      }
+      var req = httpClient.request(options, function(res) {
+        res.setEncoding('utf-8');
+    
+        var responseString = '';
+    
+        res.on('data', function(data) {
+          responseString += data;
+        });
+    
+        res.on('end', function() {
+          console.log(responseString);
+          if (('' + res.statusCode).match(/^2\d\d$/)) {
+            var responseObject = JSON.parse(responseString);
+            success(responseObject);
+          }
+        });
       });
-  
-      res.on('end', function() {
-        console.log(responseString);
-        var responseObject = JSON.parse(responseString);
-        success(responseObject);
+
+      req.on('error', function(e) {
+        console.log(e)
       });
-    });
+    }
+    catch (err) {
+        console.log(err)
+    }
   
     req.write(dataString);
     req.end();

@@ -20,7 +20,7 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'view/capture.html'
 app.post('/image', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    callService('/image', 'POST', req.body, function(responseObj) {
+    callService('http', 'localhost', '8080', 'image/upload', 'POST', req.body, function(responseObj) {
         res.send(responseObj);
     })
 })

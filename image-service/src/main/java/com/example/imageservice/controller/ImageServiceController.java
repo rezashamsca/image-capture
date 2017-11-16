@@ -15,13 +15,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // https://stackoverflow.com/questions/21926893/sending-an-image-and-json-data-to-server-using-ajax-post-request
 // https://spring.io/guides/gs/uploading-files/
 
+@RestController
 @RequestMapping("/image")
 public class ImageServiceController {
     @Autowired
     private ImageApi imageApi;
 
-    @PostMapping("/upload")
-    public String imageUpload(@RequestParam("image") MultipartFile file, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/upload")
+    public String imageUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         imageApi.uploadImage(file);
         redirectAttributes.addFlashAttribute("message",
                 new StringBuilder().append("Successfully uploaded ")
@@ -32,7 +33,7 @@ public class ImageServiceController {
         return "redirect:/";
     }
 
-    @GetMapping("/image/{imageId}")
+    @GetMapping("{imageId")
     @ResponseBody
     public ResponseEntity<Resource> getImage(@PathVariable Long imageId) {
         Resource image = imageApi.getImage(imageId);
