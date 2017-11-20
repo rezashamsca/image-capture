@@ -24,7 +24,7 @@ document.getElementById("snap").addEventListener("click", function() {
 document.getElementById("upload").addEventListener("click", function() {
     // upload to server
     // sendImageInBase64();
-    sendImageInBase64();
+    sendImageInBinary();
 });
 
 function sendImageInBase64() {
@@ -46,6 +46,12 @@ function sendImageInBase64() {
     });
 }
 
+/*
+            'Access-Control-Allow-Origin': 'http://localhost:8080',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+
+*/
+
 function sendImageInBinary() {
     var canvas = document.getElementById('canvas');
     var dataURL = canvas.toDataURL("image/jpeg");
@@ -56,13 +62,21 @@ function sendImageInBinary() {
     }
     var file=new Blob([new Uint8Array(array)], {type: 'image/jpg'});
     var formData = new FormData();
-    formData.append("file_name_1234.jpg", file);
+    formData.append("file", file);
     $.ajax({
-        url: 'http://localhost:3000/image',
+        async: true,
+        crossDomain:true,
+        headers: {
+            "cache-control": "no-cache",
+            'Access-Control-Allow-Origin': 'http://localhost:8080',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+        },
+        url: 'http://localhost:8080/image/upload',
         data: formData,
         type: 'POST',
         processData: false,
         contentType: false,
+        mimeType: "multipart/form-data",
         success: function (data) {
             console.log(data);
         },

@@ -19,6 +19,7 @@ function performRequest(protocol, host, port, endpoint, method, data, success) {
 
     try {
       var options = {
+        async:true,
         host: host,
         port: port,
         path: endpoint,
