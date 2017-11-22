@@ -20,7 +20,7 @@ import java.util.UUID;
 // https://spring.io/guides/gs/uploading-files/
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("${com.example.imageservice.controller.imageservicecontroller.url}")
 public class ImageServiceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceController.class);
 
@@ -37,7 +37,7 @@ public class ImageServiceController {
                 .append("!")
                 .toString()
                 );
-        return "redirect:/";
+        return imageId.toString();
     }
 
     @GetMapping("{imageId")
